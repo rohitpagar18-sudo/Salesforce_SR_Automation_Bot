@@ -1,0 +1,11 @@
+# pip install -r requirements.txt --trusted-host pypi.org --trusted-host files.pythonhosted.org 
+#use this if you are having issues installing packages with pip install -r requirements.txt
+simple-salesforce
+python-dotenv
+requests
+pydantic
+httpx==0.28.1
+python-dotenv==1.1.1
+python-certifi-win32
+PyYAML==6.0.3
+pytest==8.4.2

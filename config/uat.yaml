@@ -1,0 +1,145 @@
+manageengine:
+  allowed_groups:
+    - "SalesForce - CRM"
+    # Add only when running against production:
+    # - "ITMS - SF CRM"
+
+  allowed_templates:
+    - "SalesForce CRM Issues"
+
+  ready_statuses:
+    - "Open"
+
+  technician:
+    name: "Suruthi Vijayasingh"
+    id: "77787"
+
+  completion:
+    mode: "STATUS_UPDATE"
+    target_status: "Resolved"
+    target_status_id: "4"
+    resolution_template: >-
+      Salesforce automation completed successfully.
+      All related Salesforce Cases were verified in the requested status.
+    status_comment_template: >-
+      Request resolved through Salesforce SR automation.
+      Refer to the private automation note for Case-level details.
+    verify_final_status: true
+
+    closure_rules:
+      environment: "uat"
+      bulk_when_case_count_gt: 1
+      bulk_item_name: "Bulk Closures of SRs/ Tickets/Tasks"
+      env:
+        uat:
+          count_field: "udf_long_15301"
+          bulk_item_id: null
+          pick_fields:
+            udf_pick_8104:
+              label: "Closure Reason"
+              name: "Data Create/Data Update"
+              id: "6607"
+            udf_pick_13501:
+              label: "Closure Sub Classification"
+              name: "Others"
+              id: "12698"
+        prod:
+          count_field: null
+          bulk_item_id: null
+          pick_fields: {}
+
+  closure:
+    resolution_template: >-
+      Salesforce automation completed successfully.
+      All related Salesforce Cases were verified in the requested status.
+
+    closure_comment_template: >-
+      Request completed through Salesforce SR automation.
+      Refer to the private automation note for Case-level details.
+
+    requester_ack_resolution: true
+
+    closure_code:
+      name: null
+      id: null
+
+  poll_interval_seconds: 60
+  page_size: 100
+
+  close_only_when_all_cases_succeed: true
+
+  safety_filter:
+    enabled: true
+
+    # ANY: ticket passes when date OR tag matches.
+    # ALL: ticket passes only when date AND tag match.
+    mode: "ALL"
+
+    created_within_days:
+      enabled: false
+      days: 30
+
+    required_tag:
+      enabled: true
+      value: "SR-AUTOMATION-UAT"
+
+salesforce:
+  excluded_record_types:
+    - "Handover"
+    - "POP"
+    - "Penalty Waiver"
+
+actions:
+  cancel:
+    target_status: "Cancelled"
+
+    eligible_statuses:
+      - "New"
+      - "Submitted"
+
+    require_no_open_activities: true
+
+    cancellation_reason_field: null
+    cancellation_reason_value: null
+
+  reject:
+    target_status: "Rejected"
+
+    eligible_statuses:
+      - "New"
+      - "Submitted"
+
+    require_closed_rejection_activity: false
+    require_high_confidence_intent: true
+    comment_field: "Internal_Comments__c"
+
+    comment_template: >-
+      Rejecting as per IT ticket #{ticket_number}.
+
+  close:
+    target_status: "Closed"
+
+    eligible_statuses:
+      - "New"
+      - "Submitted"
+      - "Working"
+      - "Waiting"
+
+    require_all_activities_closed: true
+
+bulk:
+  process_each_case_independently: true
+  allow_partial_salesforce_success: true
+  keep_manageengine_open_on_partial_result: true
+
+  # true: process eligible Cases and leave excluded Cases for manual work.
+  # false: if one Case is excluded, do not process any Case in the ticket.
+  allow_partial_processing: true
+
+  close_manageengine_only_when_all_successful: true
+ 
+rule_version: "0.2.0"
+
+stage2:
+  max_salesforce_updates_per_run: null
+  absolute_safety_cap: 100
