@@ -2,7 +2,7 @@ import html
 import re
 from .models import ParseResult
 
-CASE_PATTERN = re.compile(r"(?<!\d)\d{4,8}(?!\d)")
+CASE_PATTERN = re.compile(r"(?<!\d)\d{8,9}(?!\d)")
 ACTION_PATTERNS = {
     "CANCEL": (r"\bcancel\b", r"\bcancelled\b", r"\bcanceled\b", r"\bcancellation\b", r"\bcancelling\b", r"\bcanceling\b"),
     "REJECT": (r"\breject\b", r"\brejected\b", r"\brejection\b", r"\brejecting\b"),
